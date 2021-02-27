@@ -1,5 +1,8 @@
 package com.guangping.android;
 
+import com.guangping.encrypt.DigestAes;
+
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -70,5 +73,12 @@ public abstract class AndroidConstructor {
         }
 
         return randomString.toString();
+    }
+
+    public static String generateOauthId() {
+        String serial = AndroidConstructor.generateRandomSerial();
+        String androidId = AndroidConstructor.generateRandomAndroidId();
+        byte[] md5Bytes = DigestAes.getMd5Bytes(androidId + serial);
+        return DigestAes.bytes2hexString(Objects.requireNonNull(md5Bytes), false);
     }
 }

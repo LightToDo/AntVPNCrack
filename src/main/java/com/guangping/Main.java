@@ -8,6 +8,8 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.concurrent.*;
 
+import static com.guangping.android.AndroidConstructor.generateOauthId;
+
 /**
  * @author GuangPing Lin
  * @date 2021/2/21 15:40
@@ -38,13 +40,6 @@ public class Main {
             executorService.execute(inviteTask);
             i++;
         }
-    }
-
-    public static String generateOauthId() {
-        String serial = AndroidConstructor.generateRandomSerial();
-        String androidId = AndroidConstructor.generateRandomAndroidId();
-        byte[] md5Bytes = DigestAes.getMd5Bytes(androidId + serial);
-        return DigestAes.bytes2hexString(Objects.requireNonNull(md5Bytes), false);
     }
 }
 
