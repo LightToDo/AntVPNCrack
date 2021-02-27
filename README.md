@@ -1,3 +1,5 @@
+# 声明
+代码只供测试学习只用。
 ## AntVPN-蚂蚁VPN破解
 By cracking the invitation reward, you can get unlimited traffic account.通过破解邀请奖励，从而获得无限流量的账号。
 ## 免费获取无限流量的活动
