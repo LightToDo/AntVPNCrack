@@ -22,6 +22,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import static com.guangping.android.AndroidConstructor.generateOauthId;
 import static java.util.Objects.isNull;
 import static org.jsoup.Connection.Method.GET;
 
@@ -298,7 +299,7 @@ public class InviteTask implements Runnable {
 
             try {
                 for (int i = 1; i <= remain; ) {
-                    String newOauthId = Main.generateOauthId();
+                    String newOauthId = generateOauthId();
 
                     AntResponsePackage exchange = exchange(affCode, newOauthId);
 
