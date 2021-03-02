@@ -1,11 +1,8 @@
 package com.guangping;
 
-import com.guangping.android.AndroidConstructor;
-import com.guangping.encrypt.DigestAes;
 import com.guangping.invite.InviteTask;
 
 import java.time.Instant;
-import java.util.Objects;
 import java.util.concurrent.*;
 
 import static com.guangping.android.AndroidConstructor.generateOauthId;
@@ -15,7 +12,7 @@ import static com.guangping.android.AndroidConstructor.generateOauthId;
  * @date 2021/2/21 15:40
  */
 public class Main {
-    private static final Instant ACTIVITY = Instant.parse("2021-02-28T00:00:00.00Z");
+    private static final Instant ACTIVITY = Instant.parse("2021-03-28T00:00:00.00Z");
 
     private static ExecutorService executorService;
 

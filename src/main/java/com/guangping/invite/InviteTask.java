@@ -2,7 +2,6 @@ package com.guangping.invite;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.guangping.*;
 import com.guangping.pojo.Data;
 import com.guangping.pojo.InternetAddress;
 import com.guangping.pojo.Package;
