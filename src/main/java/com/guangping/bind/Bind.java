@@ -22,7 +22,9 @@ public class Bind {
     private static final String BIND_PHONE = "validateCode";
     private static final String SYSTEM_VERSION = "M5 Note Android 7.0";
     private static final String QUIT = "q";
-    private static final String HAS_BIND = "无需切换";
+    private static final String PHONE_HAS_BEEN_BIND = "无需切换";
+    private static final String BIND_SUCCESS = "验证成功！";
+
 
     public static String sendSms(String oauthId, String countyCode, String mobile) throws IOException {
         Data data = InviteTask.p.getData();
@@ -89,7 +91,7 @@ public class Bind {
                 System.out.println("验证码发送结果: " + result);
             } while (isNull(result) || !result.contains(SUCCESS));
 
-            do {
+            while (!quit) {
                 System.out.print("请输入验证码[取消输入q/Q]: ");
                 code = scanner.nextLine();
 
@@ -100,9 +102,10 @@ public class Bind {
 
                 result = bindPhone(code, smsBindPhoneData);
                 System.out.println("绑定手机结果: " + result);
-                ok = !isNull(result) && (result.contains(SUCCESS) || result.contains(HAS_BIND));
+                ok = BIND_SUCCESS.equals(result) || (!isNull(result) && result.contains(PHONE_HAS_BEEN_BIND));
+
                 quit = ok;
-            } while (!quit);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -111,7 +114,7 @@ public class Bind {
     }
 
     public static void main(String[] args) {
-        boolean input = input("034be4e2153feb56fac0bb5cd2f5fa65");
+        boolean input = input("");
         System.out.println(input);
     }
 }
