@@ -336,7 +336,7 @@ public class InviteTask implements Runnable {
         data.setOauthId(oauthId);
 
         try {
-            AntResponsePackage response = response(request(data));
+            AntResponsePackage response = response(request(data, false));
 
             return getData(response, keys);
         } catch (Exception e) {
@@ -371,7 +371,7 @@ public class InviteTask implements Runnable {
         exchangeData.setMod(USER);
         exchangeData.setCode(EXCHANGE_AFF);
 
-        return response(request(exchangeData));
+        return response(request(exchangeData, false));
     }
 
     public static List<String> getData(AntResponsePackage antResponsePackage, String... keys) throws IOException {
@@ -382,7 +382,10 @@ public class InviteTask implements Runnable {
             JsonNode jsonNode = OBJECT_MAPPER.readTree(dataCopy);
             if (!isNull(keys) && keys.length > 0) {
                 for (String key : keys) {
-                    lines.add(jsonNode.findValue(key).asText());
+                    JsonNode value = jsonNode.findValue(key);
+                    if (!isNull(value)) {
+                        lines.add(value.asText());
+                    }
                 }
             } else {
                 Iterator<JsonNode> elements = jsonNode.elements();
@@ -399,7 +402,7 @@ public class InviteTask implements Runnable {
         return null;
     }
 
-    public static String request(Data data) {
+    public static String request(Data data, boolean bind) {
         RequestParameter requestParameter = getRequestParameter(data);
 
         String body = null;
@@ -409,15 +412,20 @@ public class InviteTask implements Runnable {
             CONNECTION.get().data(requestParameter.getMap());
             CONNECTION.get().userAgent(uaRandom("ANDROID"));
 
-            boolean timeout;
+            boolean timeout = false;
 
-            InternetAddress internetAddress;
+            InternetAddress internetAddress = null;
             do {
-                internetAddress = getIp();
+                if (!bind) {
+                    internetAddress = getIp();
+                }
 
                 try {
-                    if (!(timeout = isNull(internetAddress)) && !(timeout = !testIp(internetAddress))) {
-                        CONNECTION.get().proxy(internetAddress.getIp(), internetAddress.getPort());
+                    if (bind || (!(timeout = isNull(internetAddress)) && !(timeout = !testIp(internetAddress)))) {
+                        if (!bind) {
+                            CONNECTION.get().proxy(internetAddress.getIp(), internetAddress.getPort());
+                        }
+
                         try {
                             TimeUnit.SECONDS.sleep(7);
                         } catch (InterruptedException e) {

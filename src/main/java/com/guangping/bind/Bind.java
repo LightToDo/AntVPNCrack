@@ -11,6 +11,9 @@ import java.util.Scanner;
 import static com.guangping.invite.InviteTask.*;
 import static java.util.Objects.isNull;
 
+/**
+ * @author Guangping Lin
+ */
 public class Bind {
 
     private static SmsBindPhoneData smsBindPhoneData;
@@ -19,6 +22,7 @@ public class Bind {
     private static final String BIND_PHONE = "validateCode";
     private static final String SYSTEM_VERSION = "M5 Note Android 7.0";
     private static final String QUIT = "q";
+    private static final String HAS_BIND = "无需切换";
 
     public static String sendSms(String oauthId, String countyCode, String mobile) throws IOException {
         Data data = InviteTask.p.getData();
@@ -34,10 +38,10 @@ public class Bind {
         smsBindPhoneData.setCountryCode(countyCode);
         smsBindPhoneData.setMobile(mobile);
 
-        AntResponsePackage response = response(request(smsBindPhoneData));
+        AntResponsePackage response = response(request(smsBindPhoneData, true));
         List<String> lines = getData(response, MSG);
 
-        return isNull(lines) ? null : lines.get(0);
+        return isNull(lines) || lines.isEmpty() ? null : lines.get(0);
     }
 
     public static String bindPhone(String code, SmsBindPhoneData smsBindPhoneData) throws IOException {
@@ -53,15 +57,17 @@ public class Bind {
         bindPhoneData.setVCode(code);
         bindPhoneData.setType(10);
         bindPhoneData.setCountryCode(smsBindPhoneData.getCountryCode());
+        bindPhoneData.setMobile(smsBindPhoneData.getMobile());
 
-        AntResponsePackage response = response(request(bindPhoneData));
+        AntResponsePackage response = response(request(bindPhoneData, true));
         List<String> lines = getData(response, MSG);
 
         return isNull(lines) ? null : lines.get(0);
     }
 
     public static boolean input(String oauthId) {
-        boolean quit = false;
+        boolean quit;
+        boolean ok = false;
 
         try (Scanner scanner = new Scanner(System.in)) {
             String result;
@@ -94,12 +100,18 @@ public class Bind {
 
                 result = bindPhone(code, smsBindPhoneData);
                 System.out.println("绑定手机结果: " + result);
-                quit = !isNull(result) && result.contains(SUCCESS);
+                ok = !isNull(result) && (result.contains(SUCCESS) || result.contains(HAS_BIND));
+                quit = ok;
             } while (!quit);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return quit;
+        return ok;
+    }
+
+    public static void main(String[] args) {
+        boolean input = input("034be4e2153feb56fac0bb5cd2f5fa65");
+        System.out.println(input);
     }
 }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @date 2021/2/22 17:19
  */
 public class BindPhoneData extends SmsBindPhoneData {
-    @JsonProperty("vcode")
+    @JsonProperty("v_code")
     private String vCode;
     private String msgSystemVer;
 
