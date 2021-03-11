@@ -23,8 +23,6 @@ public class Bind {
     private static final String SYSTEM_VERSION = "M5 Note Android 7.0";
     private static final String QUIT = "q";
     private static final String PHONE_HAS_BEEN_BIND = "无需切换";
-    private static final String BIND_SUCCESS = "验证成功！";
-
 
     public static String sendSms(String oauthId, String countyCode, String mobile) throws IOException {
         Data data = InviteTask.p.getData();
@@ -102,7 +100,7 @@ public class Bind {
 
                 result = bindPhone(code, smsBindPhoneData);
                 System.out.println("绑定手机结果: " + result);
-                ok = BIND_SUCCESS.equals(result) || (!isNull(result) && result.contains(PHONE_HAS_BEEN_BIND));
+                ok = !isNull(result) && (result.contains(SUCCESS) || (result.contains(PHONE_HAS_BEEN_BIND)));
 
                 quit = ok;
             }
